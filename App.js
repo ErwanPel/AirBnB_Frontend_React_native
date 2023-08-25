@@ -4,13 +4,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import HomeScreen from "./containers/HomeScreen";
 import ProfileScreen from "./containers/ProfileScreen";
 import SignInScreen from "./containers/SignInScreen";
 import SignUpScreen from "./containers/SignUpScreen";
 import SettingsScreen from "./containers/SettingsScreen";
 import SplashScreen from "./containers/SplashScreen";
-import { useWindowDimensions } from "react-native";
+import { useWindowDimensions, Image, StyleSheet } from "react-native";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -23,6 +24,7 @@ export default function App() {
 
   const setToken = async (token) => {
     if (token) {
+      console.log("token");
       await AsyncStorage.setItem("userToken", token);
     } else {
       await AsyncStorage.removeItem("userToken");
@@ -102,18 +104,34 @@ export default function App() {
                       <Stack.Screen
                         name="Home"
                         options={{
-                          title: "My App",
-                          headerStyle: { backgroundColor: "red" },
-                          headerTitleStyle: { color: "white" },
+                          headerStyle: { backgroundColor: "white" },
+                          headerTitleAlign: "center",
+                          headerTitle: () => {
+                            return (
+                              <Image
+                                style={styles.logo}
+                                source={require("./assets/logo.png")}
+                              />
+                            );
+                          },
                         }}
                       >
-                        {() => <HomeScreen />}
+                        {() => <HomeScreen height={height} width={width} />}
                       </Stack.Screen>
 
                       <Stack.Screen
-                        name="Profile"
+                        name="Room"
                         options={{
-                          title: "User Profile",
+                          headerStyle: { backgroundColor: "white" },
+                          headerTitleAlign: "center",
+                          headerTitle: () => {
+                            return (
+                              <Image
+                                style={styles.logo}
+                                source={require("./assets/logo.png")}
+                              />
+                            );
+                          },
                         }}
                       >
                         {() => <ProfileScreen />}
@@ -121,16 +139,40 @@ export default function App() {
                     </Stack.Navigator>
                   )}
                 </Tab.Screen>
+
                 <Tab.Screen
-                  name="TabSettings"
+                  name="TabAroundMe"
                   options={{
-                    tabBarLabel: "Settings",
+                    tabBarLabel: "Around me",
                     tabBarIcon: ({ color, size }) => (
                       <Ionicons
-                        name={"ios-options"}
-                        size={size}
-                        color={color}
+                        name="location-outline"
+                        size={24}
+                        color="black"
                       />
+                    ),
+                  }}
+                >
+                  {() => (
+                    <Stack.Navigator>
+                      <Stack.Screen
+                        name="Profile"
+                        options={{
+                          title: "User Profile",
+                        }}
+                      >
+                        {() => <ProfileScreen setToken={setToken} />}
+                      </Stack.Screen>
+                    </Stack.Navigator>
+                  )}
+                </Tab.Screen>
+
+                <Tab.Screen
+                  name="TabProfile"
+                  options={{
+                    tabBarLabel: "My profile",
+                    tabBarIcon: ({ color, size }) => (
+                      <AntDesign name="user" size={24} color="black" />
                     ),
                   }}
                 >
@@ -155,3 +197,11 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  logo: {
+    width: 30,
+    height: 30,
+    resizeMode: "contain",
+  },
+});

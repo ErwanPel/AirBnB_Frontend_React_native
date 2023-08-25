@@ -28,7 +28,7 @@ export default function SignInScreen({ setToken, width, height }) {
 
   const styles = useStyle(height, width);
 
-  console.log(Platform.OS);
+  // console.log(Platform.OS);
 
   const fetchData = async (data) => {
     try {
