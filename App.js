@@ -6,13 +6,14 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import HomeScreen from "./containers/HomeScreen";
-import ProfileScreen from "./containers/ProfileScreen";
+import RoomScreen from "./containers/RoomScreen";
 import SignInScreen from "./containers/SignInScreen";
 import SignUpScreen from "./containers/SignUpScreen";
 import SettingsScreen from "./containers/SettingsScreen";
 import SplashScreen from "./containers/SplashScreen";
-import { useWindowDimensions, Image, StyleSheet } from "react-native";
+import AroundMeScreen from "./containers/AroundMeScreen";
 
+import { useWindowDimensions, Image, StyleSheet } from "react-native";
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -116,7 +117,13 @@ export default function App() {
                           },
                         }}
                       >
-                        {() => <HomeScreen height={height} width={width} />}
+                        {(props) => (
+                          <HomeScreen
+                            {...props}
+                            height={height}
+                            width={width}
+                          />
+                        )}
                       </Stack.Screen>
 
                       <Stack.Screen
@@ -134,7 +141,7 @@ export default function App() {
                           },
                         }}
                       >
-                        {() => <ProfileScreen />}
+                        {(props) => <RoomScreen {...props} />}
                       </Stack.Screen>
                     </Stack.Navigator>
                   )}
@@ -156,12 +163,21 @@ export default function App() {
                   {() => (
                     <Stack.Navigator>
                       <Stack.Screen
-                        name="Profile"
+                        name="Around Me"
                         options={{
-                          title: "User Profile",
+                          headerStyle: { backgroundColor: "white" },
+                          headerTitleAlign: "center",
+                          headerTitle: () => {
+                            return (
+                              <Image
+                                style={styles.logo}
+                                source={require("./assets/logo.png")}
+                              />
+                            );
+                          },
                         }}
                       >
-                        {() => <ProfileScreen setToken={setToken} />}
+                        {() => <AroundMeScreen setToken={setToken} />}
                       </Stack.Screen>
                     </Stack.Navigator>
                   )}

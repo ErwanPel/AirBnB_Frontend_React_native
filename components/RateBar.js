@@ -16,9 +16,9 @@ export default function RateBar({ rating }) {
 
   return (
     <View style={styles.ratingBloc}>
-      {arrayRate.map((star) => {
+      {arrayRate.map((star, index) => {
         return (
-          <View>
+          <View key={index}>
             {star === "full" && (
               <Entypo name="star" size={24} color="#E0A42E" />
             )}

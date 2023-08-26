@@ -1,4 +1,3 @@
-import { useRoute } from "@react-navigation/core";
 import {
   Text,
   View,
@@ -12,13 +11,14 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import RateBar from "../components/RateBar";
 import { AntDesign } from "@expo/vector-icons";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
-export default function ProfileScreen() {
+export default function RoomScreen({ route }) {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState("");
   const [visibleDescription, setVisibleDescription] = useState(false);
 
-  const { params } = useRoute();
+  const { params } = route;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -97,7 +97,25 @@ export default function ProfileScreen() {
           </TouchableOpacity>
         )}
       </View>
-      <View style={styles.map}></View>
+      <MapView
+        style={styles.map}
+        provider={PROVIDER_GOOGLE}
+        initialRegion={{
+          latitude: data.location[1],
+          longitude: data.location[0],
+          latitudeDelta: 0.1,
+          longitudeDelta: 0.1,
+        }}
+      >
+        <Marker
+          coordinate={{
+            latitude: data.location[1],
+            longitude: data.location[0],
+          }}
+          title={data.title}
+          description={data.description}
+        />
+      </MapView>
     </ScrollView>
   );
 }
@@ -179,9 +197,8 @@ const styles = StyleSheet.create({
     paddingRight: 10,
   },
   map: {
-    height: 400,
+    height: 250,
     borderWidth: 1,
     width: "100%",
-    backgroundColor: "green",
   },
 });

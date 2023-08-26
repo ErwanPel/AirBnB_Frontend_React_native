@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/core";
 import {
   Button,
   Text,
@@ -11,15 +10,13 @@ import {
 } from "react-native";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { NavigationContainer } from "@react-navigation/native";
 import RateBar from "../components/RateBar";
 
-export default function HomeScreen({ height, width }) {
+export default function HomeScreen({ height, width, navigation }) {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState("");
 
   const styles = useStyle(width, height);
-  const navigation = useNavigation();
 
   const intl = new Intl.NumberFormat("fr-FR", {
     style: "currency",
