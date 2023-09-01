@@ -9,7 +9,7 @@ import HomeScreen from "./containers/HomeScreen";
 import RoomScreen from "./containers/RoomScreen";
 import SignInScreen from "./containers/SignInScreen";
 import SignUpScreen from "./containers/SignUpScreen";
-import SettingsScreen from "./containers/SettingsScreen";
+import ProfileScreen from "./containers/ProfileScreen";
 import SplashScreen from "./containers/SplashScreen";
 import AroundMeScreen from "./containers/AroundMeScreen";
 
@@ -23,12 +23,16 @@ export default function App() {
 
   const { height, width } = useWindowDimensions();
 
-  const setToken = async (token) => {
+  const setToken = async (token, id) => {
     if (token) {
-      console.log("token");
       await AsyncStorage.setItem("userToken", token);
     } else {
       await AsyncStorage.removeItem("userToken");
+    }
+    if (id) {
+      await AsyncStorage.setItem("userId", id);
+    } else {
+      await AsyncStorage.removeItem("UserId");
     }
 
     setUserToken(token);
@@ -154,8 +158,8 @@ export default function App() {
                     tabBarIcon: ({ color, size }) => (
                       <Ionicons
                         name="location-outline"
-                        size={24}
-                        color="black"
+                        size={size}
+                        color={color}
                       />
                     ),
                   }}
@@ -177,7 +181,25 @@ export default function App() {
                           },
                         }}
                       >
-                        {() => <AroundMeScreen setToken={setToken} />}
+                        {(props) => <AroundMeScreen {...props} />}
+                      </Stack.Screen>
+
+                      <Stack.Screen
+                        name="RoomMap"
+                        options={{
+                          headerStyle: { backgroundColor: "white" },
+                          headerTitleAlign: "center",
+                          headerTitle: () => {
+                            return (
+                              <Image
+                                style={styles.logo}
+                                source={require("./assets/logo.png")}
+                              />
+                            );
+                          },
+                        }}
+                      >
+                        {(props) => <RoomScreen {...props} />}
                       </Stack.Screen>
                     </Stack.Navigator>
                   )}
@@ -195,12 +217,27 @@ export default function App() {
                   {() => (
                     <Stack.Navigator>
                       <Stack.Screen
-                        name="Settings"
+                        name="MyProfile"
                         options={{
-                          title: "Settings",
+                          headerStyle: { backgroundColor: "white" },
+                          headerTitleAlign: "center",
+                          headerTitle: () => {
+                            return (
+                              <Image
+                                style={styles.logo}
+                                source={require("./assets/logo.png")}
+                              />
+                            );
+                          },
                         }}
                       >
-                        {() => <SettingsScreen setToken={setToken} />}
+                        {(props) => (
+                          <ProfileScreen
+                            setToken={setToken}
+                            userToken={userToken}
+                            {...props}
+                          />
+                        )}
                       </Stack.Screen>
                     </Stack.Navigator>
                   )}

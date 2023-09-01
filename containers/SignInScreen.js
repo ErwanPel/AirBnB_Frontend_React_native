@@ -33,7 +33,6 @@ export default function SignInScreen({ setToken, width, height }) {
   const fetchData = async (data) => {
     try {
       setLoading(true);
-      console.log("fetchdata", data);
 
       const response = await axios.post(
         "https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/log_in",
@@ -41,7 +40,9 @@ export default function SignInScreen({ setToken, width, height }) {
       );
       setLoading(false);
       const userToken = response.data.token;
-      setToken(userToken);
+      const userId = response.data.id;
+
+      setToken(userToken, userId);
       alert("connexion réussi !");
     } catch (error) {
       setLoading(false);
@@ -55,7 +56,6 @@ export default function SignInScreen({ setToken, width, height }) {
 
     if (!email || !password) {
       setErrorMessage("Please fill all fields");
-      console.log("press");
     } else {
       const reg = /^[\w\.\-]+[\w\.\-]*@[\w\.\-]{2,}\.[a-z_\.\-]+[a-z_\-]+$/;
 
@@ -215,8 +215,8 @@ const useStyle = (height, width) => {
     textLinearGradient: {
       backgroundColor: "white",
       borderRadius: 50,
-      paddingHorizontal: 70,
-      paddingVertical: 17,
+      paddingHorizontal: Platform.OS === "android" ? 70 : 68,
+      paddingVertical: Platform.OS === "android" ? 17 : 18,
     },
     textGrey: {
       color: "grey",

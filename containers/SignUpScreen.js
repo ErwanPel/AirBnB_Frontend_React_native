@@ -33,16 +33,15 @@ export default function SignUpScreen({ setToken, width, height }) {
   const fetchData = async (data) => {
     try {
       setLoading(true);
-      console.log("fetchdata", data);
-
       const response = await axios.post(
         "https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/sign_up",
         data
       );
       setLoading(false);
       const userToken = response.data.token;
-      setToken(userToken);
-      alert("connexion réussi !");
+      const userId = response.data.id;
+      setToken(userToken, userId);
+      alert("Le compte a été crée !");
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -281,8 +280,8 @@ const useStyle = (height, width) => {
     textLinearGradient: {
       backgroundColor: "white",
       borderRadius: 50,
-      paddingHorizontal: 70,
-      paddingVertical: 17,
+      paddingHorizontal: Platform.OS === "android" ? 72 : 71,
+      paddingVertical: Platform.OS === "android" ? 17 : 18,
     },
     textGrey: {
       color: "grey",
