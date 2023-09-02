@@ -14,6 +14,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
+import Lotties from "../components/Lotties";
 
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 
@@ -25,6 +26,8 @@ export default function ProfileScreen({ setToken, userToken }) {
   const [changeText, setChangeText] = useState(false);
   const [changePicture, setChangePicture] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [update, setUpdate] = useState(false);
 
   const styles = useStyle(changeText, changePicture);
 
@@ -41,6 +44,7 @@ export default function ProfileScreen({ setToken, userToken }) {
       const reg = /^[\w\.\-]+[\w\.\-]*@[\w\.\-]{2,}\.[a-z_\.\-]+[a-z_\-]+$/;
 
       if (reg.test(email) === true) {
+        setUpdate(true);
         try {
           const response = await axios.put(
             "https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/update",
@@ -52,6 +56,7 @@ export default function ProfileScreen({ setToken, userToken }) {
             }
           );
           alert("Your profile have been modified");
+          setUpdate(false);
           setChangeText(false);
         } catch (error) {
           console.log(error);
@@ -61,6 +66,7 @@ export default function ProfileScreen({ setToken, userToken }) {
       }
     }
     if (changePicture) {
+      setUpdate(true);
       const tab = picture.split(".");
 
       const formData = new FormData();
@@ -83,6 +89,7 @@ export default function ProfileScreen({ setToken, userToken }) {
           }
         );
         alert("Your profile have been modified");
+        setUpdate(false);
         setChangePicture(false);
       } catch (error) {
         console.log("erreur", JSON.stringify(error.response, null, 2));
@@ -147,6 +154,7 @@ export default function ProfileScreen({ setToken, userToken }) {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     const getUserData = async () => {
       try {
         let userId = await AsyncStorage.getItem("userId");
@@ -163,6 +171,7 @@ export default function ProfileScreen({ setToken, userToken }) {
         setUsername(response.data.username);
         setPicture(response.data.photo);
         setDescription(response.data.description);
+        setIsLoading(false);
       } catch (error) {
         console.log(error.response);
       }
@@ -170,7 +179,11 @@ export default function ProfileScreen({ setToken, userToken }) {
     getUserData();
   }, []);
 
-  return (
+  return isLoading ? (
+    <View style={styles.backgroundLotties}>
+      <Lotties />
+    </View>
+  ) : (
     <KeyboardAwareScrollView
       contentContainerStyle={styles.container}
       enableOnAndroid
@@ -225,30 +238,34 @@ export default function ProfileScreen({ setToken, userToken }) {
       />
       <View style={styles.gap20}>
         {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
-        <TouchableHighlight
-          style={styles.button}
-          onPress={handleSubmit}
-          disabled={!changeText && !changePicture}
-          underlayColor={`#cc0000`}
-        >
-          <LinearGradient
-            // Button Linear Gradient
-            colors={["#cc1100", "#F9585D", "#cc1100"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
+        {update ? (
+          <Lotties />
+        ) : (
+          <TouchableHighlight
             style={styles.button}
-            locations={[0, 0.5, 1]}
+            onPress={handleSubmit}
+            disabled={!changeText && !changePicture}
+            underlayColor={`#cc0000`}
           >
-            <View style={styles.updateLinearGradient}>
-              <Text style={styles.textWidth}>UPDATE</Text>
-            </View>
-          </LinearGradient>
-        </TouchableHighlight>
+            <LinearGradient
+              // Button Linear Gradient
+              colors={["#cc1100", "#F9585D", "#cc1100"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.button}
+              locations={[0, 0.5, 1]}
+            >
+              <View style={styles.updateLinearGradient}>
+                <Text style={styles.textWidth}>UPDATE</Text>
+              </View>
+            </LinearGradient>
+          </TouchableHighlight>
+        )}
 
         <TouchableHighlight
           style={styles.button}
           onPress={() => {
-            setToken(null);
+            setToken(null, null);
           }}
           underlayColor={`#cc0000`}
         >
@@ -280,6 +297,13 @@ const useStyle = (changeText, changePicture) => {
       borderTopColor: "grey",
       height: "100%",
     },
+    backgroundLotties: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "white",
+    },
+
     viewPicture: {
       borderWidth: 1,
       height: 125,
@@ -300,6 +324,7 @@ const useStyle = (changeText, changePicture) => {
     },
     gap20: {
       gap: 20,
+      alignItems: "center",
     },
     addImageBloc: {
       justifyContent: "space-around",

@@ -11,6 +11,7 @@ import {
 import { useState, useEffect } from "react";
 import axios from "axios";
 import RateBar from "../components/RateBar";
+import Lotties from "../components/Lotties";
 
 export default function HomeScreen({ height, width, navigation }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -41,7 +42,9 @@ export default function HomeScreen({ height, width, navigation }) {
   }, []);
 
   return isLoading ? (
-    <ActivityIndicator size={24} color="red" style={styles.loading} />
+    <View style={styles.backgroundLotties}>
+      <Lotties />
+    </View>
   ) : (
     <FlatList
       contentContainerStyle={[styles.centerAlign, styles.scrollview]}
@@ -95,11 +98,13 @@ export default function HomeScreen({ height, width, navigation }) {
 
 const useStyle = (width, height) => {
   const styles = StyleSheet.create({
-    loading: {
+    backgroundLotties: {
+      flex: 1,
       alignItems: "center",
       justifyContent: "center",
-      height: "100%",
+      backgroundColor: "white",
     },
+
     scrollview: {
       width: "100%",
       backgroundColor: "white",

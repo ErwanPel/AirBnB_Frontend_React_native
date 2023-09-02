@@ -12,6 +12,8 @@ import axios from "axios";
 import RateBar from "../components/RateBar";
 import { AntDesign } from "@expo/vector-icons";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import Swiper from "react-native-swiper";
+import Lotties from "../components/Lotties";
 
 export default function RoomScreen({ route }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -44,11 +46,32 @@ export default function RoomScreen({ route }) {
   });
 
   return isLoading ? (
-    <ActivityIndicator size={24} color="red" style={styles.loading} />
+    <View style={styles.backgroundLotties}>
+      <Lotties />
+    </View>
   ) : (
     <ScrollView contentContainerStyle={styles.centerAlign}>
       <View style={styles.card}>
-        <Image source={{ uri: data.photos[0].url }} style={styles.picture} />
+        <Swiper
+          showsButtons
+          style={styles.wrapper}
+          nextButton={<Text style={styles.buttonText}>›</Text>}
+          prevButton={<Text style={styles.buttonText}>‹</Text>}
+          dotColor="grey"
+          activeDotColor="red"
+        >
+          {data.photos.map((photo) => {
+            console.log(photo);
+            return (
+              <Image
+                key={photo.picture_id}
+                source={{ uri: photo.url }}
+                style={styles.picture}
+              />
+            );
+          })}
+        </Swiper>
+
         <View style={styles.price}>
           <Text style={styles.textPrice}>{intl.format(data.price)}</Text>
         </View>
@@ -121,10 +144,11 @@ export default function RoomScreen({ route }) {
 }
 
 const styles = StyleSheet.create({
-  loading: {
-    aligndatas: "center",
+  backgroundLotties: {
+    flex: 1,
+    alignItems: "center",
     justifyContent: "center",
-    height: "100%",
+    backgroundColor: "white",
   },
   card: {
     width: "100%",
@@ -137,8 +161,15 @@ const styles = StyleSheet.create({
   },
   picture: {
     width: "100%",
-    height: 275,
+    height: 325,
     resizeMode: "contain",
+  },
+  wrapper: {
+    height: 325,
+  },
+  buttonText: {
+    color: "red",
+    fontSize: 50,
   },
   pictureProfil: {
     width: 80,
@@ -149,13 +180,12 @@ const styles = StyleSheet.create({
   },
   price: {
     position: "absolute",
-
     backgroundColor: "black",
     width: 100,
     height: 50,
-    aligndatas: "center",
+    alignItems: "center",
     justifyContent: "center",
-    bottom: 20,
+    bottom: 60,
     left: 0,
   },
   textPrice: {

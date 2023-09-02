@@ -17,6 +17,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Entypo } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import Lotties from "../components/Lotties";
 
 export default function SignInScreen({ setToken, width, height }) {
   const [email, setEmail] = useState("");
@@ -50,7 +51,7 @@ export default function SignInScreen({ setToken, width, height }) {
       setErrorMessage("This adress mail or password are incorrect");
     }
   };
-  // nono@airbnb-api.com
+
   const handleSubmit = () => {
     setErrorMessage("");
 
@@ -80,7 +81,9 @@ export default function SignInScreen({ setToken, width, height }) {
         <Text style={[styles.bold, styles.title]}>Sign in</Text>
       </View>
       {Loading ? (
-        <ActivityIndicator size={28} color="red" />
+        <View style={styles.backgroundLotties}>
+          <Lotties />
+        </View>
       ) : (
         <View style={styles.form}>
           <TextInput
@@ -164,7 +167,15 @@ const useStyle = (height, width) => {
     container: {
       paddingTop: Constants.statusBarHeight,
       justifyContent: "space-around",
-      height: height,
+      height: "100%",
+      backgroundColor: "white",
+      paddingBottom: 20,
+    },
+    backgroundLotties: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "white",
     },
     border: {
       borderWidth: 1,
@@ -196,6 +207,8 @@ const useStyle = (height, width) => {
     },
     error: {
       color: "red",
+      width: 350,
+      textAlign: "center",
     },
     input: {
       borderBottomWidth: 1,

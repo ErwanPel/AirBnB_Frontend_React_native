@@ -16,6 +16,7 @@ import axios from "axios";
 import { Entypo } from "@expo/vector-icons";
 import { Platform } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import Lotties from "../components/Lotties";
 
 export default function SignUpScreen({ setToken, width, height }) {
   const [email, setEmail] = useState("");
@@ -83,7 +84,9 @@ export default function SignUpScreen({ setToken, width, height }) {
         <Text style={[styles.bold, styles.title]}>Sign up</Text>
       </View>
       {Loading ? (
-        <ActivityIndicator size={28} color="red" />
+        <View style={styles.backgroundLotties}>
+          <Lotties />
+        </View>
       ) : (
         <View style={styles.form}>
           <TextInput
@@ -220,6 +223,12 @@ const useStyle = (height, width) => {
       paddingBottom: 20,
       justifyContent: "space-around",
       gap: height * (8 / 100),
+    },
+    backgroundLotties: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "white",
     },
     border: {
       borderWidth: 1,

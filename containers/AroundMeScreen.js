@@ -9,6 +9,7 @@ import * as Location from "expo-location";
 import { useState, useEffect } from "react";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import axios from "axios";
+import Lotties from "../components/Lotties";
 
 export default function MapAroundMe({ navigation }) {
   const [coords, setCoords] = useState({
@@ -73,7 +74,9 @@ export default function MapAroundMe({ navigation }) {
   }, []);
 
   return isLoading ? (
-    <ActivityIndicator size={24} color="red" />
+    <View style={styles.backgroundLotties}>
+      <Lotties />
+    </View>
   ) : (
     <MapView
       showsUserLocation={true}
@@ -109,5 +112,11 @@ export default function MapAroundMe({ navigation }) {
 const styles = StyleSheet.create({
   map: {
     flex: 1,
+  },
+  backgroundLotties: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "white",
   },
 });
