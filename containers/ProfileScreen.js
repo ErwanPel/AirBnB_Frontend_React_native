@@ -24,30 +24,40 @@ export default function ProfileScreen({ setToken, userToken }) {
   const [description, setDescription] = useState("");
   const [changeText, setChangeText] = useState(false);
   const [changePicture, setChangePicture] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const styles = useStyle(changeText, changePicture);
 
   console.log(changePicture, changeText);
 
   const handleChangeText = (setState, text) => {
+    setErrorMessage("");
     setState(text);
     setChangeText(true);
   };
 
   const handleSubmit = async () => {
     if (changeText) {
-      try {
-        const response = await axios.put(
-          "https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/update",
-          { email: email, username: username, description: description },
-          {
-            headers: {
-              Authorization: `Bearer ${userToken}`,
-            },
-          }
-        );
+      const reg = /^[\w\.\-]+[\w\.\-]*@[\w\.\-]{2,}\.[a-z_\.\-]+[a-z_\-]+$/;
 
-        setChangeText(false);
-      } catch (error) {
-        console.log(error);
+      if (reg.test(email) === true) {
+        try {
+          const response = await axios.put(
+            "https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/update",
+            { email: email, username: username, description: description },
+            {
+              headers: {
+                Authorization: `Bearer ${userToken}`,
+              },
+            }
+          );
+          alert("Your profile have been modified");
+          setChangeText(false);
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        setErrorMessage("This adress mail is not correct");
       }
     }
     if (changePicture) {
@@ -72,7 +82,7 @@ export default function ProfileScreen({ setToken, userToken }) {
             },
           }
         );
-
+        alert("Your profile have been modified");
         setChangePicture(false);
       } catch (error) {
         console.log("erreur", JSON.stringify(error.response, null, 2));
@@ -214,6 +224,7 @@ export default function ProfileScreen({ setToken, userToken }) {
         onChangeText={(text) => handleChangeText(setDescription, text)}
       />
       <View style={styles.gap20}>
+        {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
         <TouchableHighlight
           style={styles.button}
           onPress={handleSubmit}
@@ -259,85 +270,91 @@ export default function ProfileScreen({ setToken, userToken }) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-    paddingVertical: 20,
-    backgroundColor: "white",
-    borderTopWidth: 1,
-    borderTopColor: "grey",
-    height: "100%",
-  },
-  viewPicture: {
-    borderWidth: 1,
-    height: 125,
-    width: 125,
-    borderRadius: 75,
-    alignItems: "center",
-    justifyContent: "center",
-    borderColor: "red",
-  },
-  picture: {
-    width: 125,
-    height: 125,
-    borderRadius: 75,
-    resizeMode: "contain",
-  },
-  flexRow: {
-    flexDirection: "row",
-  },
-  gap20: {
-    gap: 20,
-  },
-  addImageBloc: {
-    justifyContent: "space-around",
-  },
-  input: {
-    borderBottomWidth: 1,
-    borderColor: "red",
-    marginBottom: 20,
-    height: 50,
-    fontSize: 16,
-    width: "80%",
-    marginVertical: 20,
-  },
+const useStyle = (changeText, changePicture) => {
+  const styles = StyleSheet.create({
+    container: {
+      alignItems: "center",
+      paddingVertical: 20,
+      backgroundColor: "white",
+      borderTopWidth: 1,
+      borderTopColor: "grey",
+      height: "100%",
+    },
+    viewPicture: {
+      borderWidth: 1,
+      height: 125,
+      width: 125,
+      borderRadius: 75,
+      alignItems: "center",
+      justifyContent: "center",
+      borderColor: "red",
+    },
+    picture: {
+      width: 125,
+      height: 125,
+      borderRadius: 75,
+      resizeMode: "contain",
+    },
+    flexRow: {
+      flexDirection: "row",
+    },
+    gap20: {
+      gap: 20,
+    },
+    addImageBloc: {
+      justifyContent: "space-around",
+    },
+    input: {
+      borderBottomWidth: 1,
+      borderColor: "red",
+      marginBottom: 20,
+      height: 50,
+      fontSize: 16,
+      width: "80%",
+      marginVertical: 20,
+    },
 
-  inputDescription: {
-    borderColor: "red",
-    marginVertical: 20,
-    fontSize: 16,
-    padding: 10,
-    height: 120,
-    borderWidth: 1,
-    textAlignVertical: "top",
-    width: "80%",
-    marginBottom: 80,
-  },
-  button: {
-    width: 200,
-    height: 60,
-    borderRadius: 50,
+    inputDescription: {
+      borderColor: "red",
+      marginVertical: 20,
+      fontSize: 16,
+      padding: 10,
+      height: 120,
+      borderWidth: 1,
+      textAlignVertical: "top",
+      width: "80%",
+      marginBottom: 80,
+    },
+    button: {
+      width: 200,
+      height: 60,
+      borderRadius: 50,
 
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  logOutLinearGradient: {
-    backgroundColor: "white",
-    borderRadius: 50,
-    paddingHorizontal: Platform.OS === "android" ? 67 : 65,
-    paddingVertical: 17,
-  },
-  updateLinearGradient: {
-    backgroundColor: "white",
-    borderRadius: 50,
-    paddingHorizontal: Platform.OS === "android" ? 70 : 69,
-    paddingVertical: 17,
-  },
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    logOutLinearGradient: {
+      backgroundColor: "white",
+      borderRadius: 50,
+      paddingHorizontal: Platform.OS === "android" ? 67 : 65,
+      paddingVertical: 17,
+    },
+    updateLinearGradient: {
+      backgroundColor: !changeText && !changePicture ? "#BFBFBF" : "white",
+      borderRadius: 50,
+      paddingHorizontal: Platform.OS === "android" ? 70 : 69,
+      paddingVertical: 17,
+    },
 
-  textWidth: {
-    width: "100%",
-    borderWidth: 1,
-    borderColor: "transparent",
-    textAlign: "center",
-  },
-});
+    textWidth: {
+      width: "100%",
+      borderWidth: 1,
+      borderColor: "transparent",
+      textAlign: "center",
+    },
+    error: {
+      color: "red",
+    },
+  });
+  return styles;
+};
