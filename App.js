@@ -236,6 +236,8 @@ export default function App() {
                             setToken={setToken}
                             userToken={userToken}
                             {...props}
+                            height={height}
+                            width={width}
                           />
                         )}
                       </Stack.Screen>

@@ -75,132 +75,133 @@ export default function SignUpScreen({ setToken, width, height }) {
   return (
     <KeyboardAwareScrollView
       contentContainerStyle={styles.container}
-      enableOnAndroid
+      style={styles.screen}
+      // enableOnAndroid
       enableAutomaticScroll
-      // extraHeight={600}
     >
       <View style={[styles.center, styles.gap20]}>
         <Image style={styles.logo} source={require("../assets/logo.png")} />
         <Text style={[styles.bold, styles.title]}>Sign up</Text>
       </View>
-      {Loading ? (
-        <View style={styles.backgroundLotties}>
-          <Lotties />
-        </View>
-      ) : (
-        <View style={styles.form}>
+
+      <View style={styles.form}>
+        <TextInput
+          style={styles.input}
+          placeholder="email"
+          value={email}
+          inputMode="email"
+          onChangeText={(text) => setEmail(text)}
+          placeholderTextColor="black"
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="username"
+          value={username}
+          inputMode="email"
+          onChangeText={(text) => setUsername(text)}
+          placeholderTextColor="black"
+        />
+
+        <TextInput
+          style={styles.inputDescription}
+          placeholder="Describe yourself with a few words..."
+          value={description}
+          inputMode="email"
+          onChangeText={(text) => setDescription(text)}
+          multiline
+          numberOfLines={5}
+          maxLength={200}
+          placeholderTextColor="black"
+        />
+
+        <View>
           <TextInput
             style={styles.input}
-            placeholder="email"
-            value={email}
-            inputMode="email"
-            onChangeText={(text) => setEmail(text)}
+            placeholder="Password"
+            value={password}
+            secureTextEntry={hide}
+            onChangeText={(text) => setPassword(text)}
             placeholderTextColor="black"
           />
+          {!hide && (
+            <Entypo
+              style={styles.eye}
+              name="eye-with-line"
+              size={28}
+              color="black"
+              onPress={() => setHide(!hide)}
+            />
+          )}
+          {hide && (
+            <Entypo
+              style={styles.eye}
+              name="eye"
+              size={28}
+              color="black"
+              onPress={() => setHide(!hide)}
+            />
+          )}
+        </View>
 
+        <View>
           <TextInput
             style={styles.input}
-            placeholder="username"
-            value={username}
-            inputMode="email"
-            onChangeText={(text) => setUsername(text)}
+            placeholder="Confirm your password"
+            value={confirmPassword}
+            secureTextEntry={hide}
+            onChangeText={(text) => setConfirmPassword(text)}
             placeholderTextColor="black"
           />
-
-          <TextInput
-            style={styles.inputDescription}
-            placeholder="Describe yourself with a few words..."
-            value={description}
-            inputMode="email"
-            onChangeText={(text) => setDescription(text)}
-            multiline
-            numberOfLines={5}
-            maxLength={200}
-            placeholderTextColor="black"
-          />
-
-          <View>
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              value={password}
-              secureTextEntry={hide}
-              onChangeText={(text) => setPassword(text)}
-              placeholderTextColor="black"
+          {!hide && (
+            <Entypo
+              style={styles.eye}
+              name="eye-with-line"
+              size={28}
+              color="black"
+              onPress={() => setHide(!hide)}
             />
-            {!hide && (
-              <Entypo
-                style={styles.eye}
-                name="eye-with-line"
-                size={28}
-                color="black"
-                onPress={() => setHide(!hide)}
-              />
-            )}
-            {hide && (
-              <Entypo
-                style={styles.eye}
-                name="eye"
-                size={28}
-                color="black"
-                onPress={() => setHide(!hide)}
-              />
-            )}
-          </View>
-
-          <View>
-            <TextInput
-              style={styles.input}
-              placeholder="Confirm your password"
-              value={confirmPassword}
-              secureTextEntry={hide}
-              onChangeText={(text) => setConfirmPassword(text)}
-              placeholderTextColor="black"
+          )}
+          {hide && (
+            <Entypo
+              style={styles.eye}
+              name="eye"
+              size={28}
+              color="black"
+              onPress={() => setHide(!hide)}
             />
-            {!hide && (
-              <Entypo
-                style={styles.eye}
-                name="eye-with-line"
-                size={28}
-                color="black"
-                onPress={() => setHide(!hide)}
-              />
-            )}
-            {hide && (
-              <Entypo
-                style={styles.eye}
-                name="eye"
-                size={28}
-                color="black"
-                onPress={() => setHide(!hide)}
-              />
-            )}
-          </View>
+          )}
         </View>
-      )}
+      </View>
+
       <View style={[styles.center, styles.gap20, styles.buttonBloc]}>
         {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
 
-        <TouchableHighlight
-          style={styles.button}
-          onPress={handleSubmit}
-          disabled={Loading}
-          underlayColor={`#cc0000`}
-        >
-          <LinearGradient
-            // Button Linear Gradient
-            colors={["#cc1100", "#F9585D", "#cc1100"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
+        {Loading ? (
+          <View style={styles.backgroundLotties}>
+            <Lotties />
+          </View>
+        ) : (
+          <TouchableHighlight
             style={styles.button}
-            locations={[0, 0.5, 1]}
+            onPress={handleSubmit}
+            disabled={Loading}
+            underlayColor={`#cc0000`}
           >
-            <View style={styles.textLinearGradient}>
-              <Text style={styles.textWidth}>SIGN IN</Text>
-            </View>
-          </LinearGradient>
-        </TouchableHighlight>
-
+            <LinearGradient
+              // Button Linear Gradient
+              colors={["#cc1100", "#F9585D", "#cc1100"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.button}
+              locations={[0, 0.5, 1]}
+            >
+              <View style={styles.textLinearGradient}>
+                <Text style={styles.textWidth}>SIGN UP</Text>
+              </View>
+            </LinearGradient>
+          </TouchableHighlight>
+        )}
         <TouchableOpacity
           style={styles.register}
           onPress={() => {
@@ -208,7 +209,7 @@ export default function SignUpScreen({ setToken, width, height }) {
           }}
         >
           <Text style={[styles.textGrey, styles.textWidth]}>
-            No account ? Register
+            Have an account ? Connect
           </Text>
         </TouchableOpacity>
       </View>
@@ -223,6 +224,10 @@ const useStyle = (height, width) => {
       paddingBottom: 20,
       justifyContent: "space-around",
       gap: height * (8 / 100),
+      backgroundColor: "white",
+    },
+    screen: {
+      backgroundColor: "white",
     },
     backgroundLotties: {
       flex: 1,
@@ -289,7 +294,7 @@ const useStyle = (height, width) => {
     textLinearGradient: {
       backgroundColor: "white",
       borderRadius: 50,
-      paddingHorizontal: Platform.OS === "android" ? 72 : 71,
+      paddingHorizontal: Platform.OS === "android" ? 70 : 69,
       paddingVertical: Platform.OS === "android" ? 17 : 18,
     },
     textGrey: {
@@ -307,13 +312,3 @@ const useStyle = (height, width) => {
   });
   return styles;
 };
-
-{
-  /* <Button
-          title="Sign up"
-          onPress={async () => {
-            const userToken = "secret-token";
-            setToken(userToken);
-          }}
-        /> */
-}

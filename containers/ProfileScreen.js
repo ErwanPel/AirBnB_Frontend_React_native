@@ -18,7 +18,7 @@ import Lotties from "../components/Lotties";
 
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 
-export default function ProfileScreen({ setToken, userToken }) {
+export default function ProfileScreen({ setToken, userToken, height, width }) {
   const [picture, setPicture] = useState(null);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -33,7 +33,7 @@ export default function ProfileScreen({ setToken, userToken }) {
 
   console.log(changePicture, changeText);
 
-  const handleChangeText = (setState, text) => {
+  const handleChangeText = (setState, text, height, width) => {
     setErrorMessage("");
     setState(text);
     setChangeText(true);
@@ -186,8 +186,8 @@ export default function ProfileScreen({ setToken, userToken }) {
   ) : (
     <KeyboardAwareScrollView
       contentContainerStyle={styles.container}
-      enableOnAndroid
       enableAutomaticScroll
+      style={styles.screen}
     >
       <View style={[styles.flexRow, styles.gap20]}>
         <View style={styles.viewPicture}>
@@ -287,15 +287,19 @@ export default function ProfileScreen({ setToken, userToken }) {
   );
 }
 
-const useStyle = (changeText, changePicture) => {
+const useStyle = (changeText, changePicture, height, width) => {
   const styles = StyleSheet.create({
     container: {
       alignItems: "center",
       paddingVertical: 20,
       backgroundColor: "white",
+      heigth: height,
       borderTopWidth: 1,
       borderTopColor: "grey",
-      height: "100%",
+      justifyContent: "space-around",
+    },
+    screen: {
+      backgroundColor: "white",
     },
     backgroundLotties: {
       flex: 1,
@@ -328,6 +332,7 @@ const useStyle = (changeText, changePicture) => {
     },
     addImageBloc: {
       justifyContent: "space-around",
+      height: 125,
     },
     input: {
       borderBottomWidth: 1,
@@ -354,10 +359,10 @@ const useStyle = (changeText, changePicture) => {
       width: 200,
       height: 60,
       borderRadius: 50,
-
       alignItems: "center",
       justifyContent: "center",
     },
+
     logOutLinearGradient: {
       backgroundColor: "white",
       borderRadius: 50,

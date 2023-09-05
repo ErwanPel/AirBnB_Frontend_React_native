@@ -161,11 +161,10 @@ const styles = StyleSheet.create({
   },
   picture: {
     width: "100%",
-    height: 325,
-    resizeMode: "contain",
+    height: 250,
   },
   wrapper: {
-    height: 325,
+    height: 250,
   },
   buttonText: {
     color: "red",
@@ -185,7 +184,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    bottom: 60,
+    bottom: 30,
     left: 0,
   },
   textPrice: {
