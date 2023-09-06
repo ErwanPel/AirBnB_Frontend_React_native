@@ -38,11 +38,11 @@ export default function SignUpScreen({ setToken, width, height }) {
         "https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/sign_up",
         data
       );
-      setLoading(false);
-      const userToken = response.data.token;
-      const userId = response.data.id;
-      setToken(userToken, userId);
-      alert("Le compte a été crée !");
+      // setLoading(false);
+      // const userToken = response.data.token;
+      // const userId = response.data.id;
+      // setToken(userToken, userId);
+      // alert("Le compte a été crée !");
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -178,9 +178,7 @@ export default function SignUpScreen({ setToken, width, height }) {
         {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
 
         {Loading ? (
-          <View style={styles.backgroundLotties}>
-            <Lotties />
-          </View>
+          <Lotties />
         ) : (
           <TouchableHighlight
             style={styles.button}
@@ -229,12 +227,7 @@ const useStyle = (height, width) => {
     screen: {
       backgroundColor: "white",
     },
-    backgroundLotties: {
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: "white",
-    },
+
     border: {
       borderWidth: 1,
     },

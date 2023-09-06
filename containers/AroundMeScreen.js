@@ -99,7 +99,6 @@ export default function MapAroundMe({ navigation }) {
             }}
             title={marker.title}
             description={marker.description}
-            // onPress={}
             onCalloutPress={() =>
               navigation.navigate("RoomMap", { id: marker._id })
             }

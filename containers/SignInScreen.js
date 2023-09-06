@@ -49,6 +49,7 @@ export default function SignInScreen({ setToken, width, height }) {
       setLoading(false);
       console.log(error);
       setErrorMessage("This adress mail or password are incorrect");
+      controller.abort();
     }
   };
 
@@ -128,9 +129,7 @@ export default function SignInScreen({ setToken, width, height }) {
       <View style={[styles.center, styles.gap20]}>
         {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
         {Loading ? (
-          <View style={styles.backgroundLotties}>
-            <Lotties />
-          </View>
+          <Lotties />
         ) : (
           <TouchableHighlight
             style={styles.button}
@@ -177,12 +176,6 @@ const useStyle = (height, width) => {
       backgroundColor: "white",
     },
     screen: {
-      backgroundColor: "white",
-    },
-    backgroundLotties: {
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
       backgroundColor: "white",
     },
     border: {
