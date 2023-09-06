@@ -50,7 +50,10 @@ export default function RoomScreen({ route }) {
       <Lotties />
     </View>
   ) : (
-    <ScrollView contentContainerStyle={styles.centerAlign}>
+    <ScrollView
+      contentContainerStyle={styles.centerAlign}
+      style={styles.screen}
+    >
       <View style={styles.card}>
         <Swiper
           showsButtons
@@ -148,6 +151,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "white",
+  },
+  screen: {
     backgroundColor: "white",
   },
   card: {
